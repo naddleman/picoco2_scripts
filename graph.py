@@ -4,23 +4,38 @@ import matplotlib.dates as mdates
 from pytz import timezone
 import sys
 
-if len(sys.argv) != 3: 
-    print('Usage: python graph.py infile.csv outfile.png')
-    sys.exit(1)
+TIMEZONE = 'US/Pacific'
+TITLE = 'Air quality: Temperature (C), Relative Humidity, CO2 (PPM)'
 
-infile, outfile = sys.argv[1:]
+def parseargs(args):
+    if len(args) != 3:
+        sys.exit('Usage: python graph.py infile.csv outfile.png')
+    infile, outfile = args[1:]
+    return infile, outfile
 
-df = pd.read_csv(infile, header=0)
-df['dt'] = mdates.date2num(df['time'])
-fig, axs = plt.subplots(3, 1, sharex=True)
-for i, col in enumerate(df.columns[1:4]):
-    axs[i-1].plot_date(df['dt'], df[col], xdate=True, tz='US/Pacific', fmt='-')
-    axs[i-1].set_ylabel(col)
+def parse_csv(csv):
+    df = pd.read_csv(csv, header=0)
+    df['dtnum'] = mdates.date2num(df['Time'])
+    return df
 
-fig.suptitle("Office atmosphere")
-plt.gcf().autofmt_xdate()
-plt.gcf().set_size_inches(10, 8)
-myFmt = mdates.DateFormatter('%H:%M')
-myFmt.set_tzinfo(timezone('US/Pacific'))
-axs[2].xaxis.set_major_formatter(myFmt)
-plt.savefig(outfile, format='png') 
+def produce_plots(df, title):
+    fig, axs = plt.subplots(3, 1, sharex=True)
+    for i, col in enumerate(df.columns[1:4]):
+        axs[i-1].plot_date(df['dtnum'], df[col], xdate=True, tz=TIMEZONE, fmt='-')
+        axs[i-1].set_ylabel(col)
+    fig.suptitle(title)
+    fig.autofmt_xdate()
+    fig.set_size_inches(10, 8)
+    myFmt = mdates.DateFormatter('%H:%M')
+    myFmt.set_tzinfo(timezone(TIMEZONE))
+    axs[2].xaxis.set_major_formatter(myFmt)
+    return fig, axs
+
+def main(argv):
+    infile, outfile = parseargs(argv)
+    df = parse_csv(infile)
+    fig, axs = produce_plots(df, TITLE)
+    plt.savefig(outfile, format='png')
+
+if __name__ == '__main__':
+    main(sys.argv)

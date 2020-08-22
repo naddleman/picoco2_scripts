@@ -6,7 +6,7 @@ if [ -z "$1" ]
 	exit 1
 fi
 
-echo time, CO2 PPM, temperature, relative humidity > $1
+echo Time, CO2 PPM, Temperature, Relative humidity > $1
 
 runtime="1 day"
 endtime=$(date -d "$runtime" +%s)
