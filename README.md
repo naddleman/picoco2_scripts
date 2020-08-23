@@ -20,4 +20,4 @@ Usage:
 python graph.py infile.csv outfile.png
 ```
 
-Requires: matplotlib, pandas >= 1.1.0, pytz.
+Requires: Python >= 3.8, matplotlib, pandas >= 1.1.0, pytz.

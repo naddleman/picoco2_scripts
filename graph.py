@@ -21,9 +21,9 @@ def parse_csv(csv):
 
 def produce_plots(df, title):
     fig, axs = plt.subplots(3, 1, sharex=True)
-    for i, col in enumerate(df.columns[1:4]):
-        axs[i-1].plot_date(df['dtnum'], df[col], xdate=True, tz=TIMEZONE, fmt='-')
-        axs[i-1].set_ylabel(col)
+    for i, col in enumerate(df.columns[1:4], -1):
+        axs[i].plot_date(df['dtnum'], df[col], xdate=True, tz=TIMEZONE, fmt='-')
+        axs[i].set_ylabel(col)
     fig.suptitle(title)
     fig.autofmt_xdate()
     fig.set_size_inches(10, 8)
