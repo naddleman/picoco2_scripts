@@ -2,17 +2,13 @@
 
 if [ -z "$1" ]
     then
-        echo "Usage: ./append_co2_data.sh outfile"
+        echo "Usage: ./track_co2.sh outfile"
 	exit 1
 fi
 
-echo Time, CO2 PPM, Temperature, Relative humidity > $1
+if [ ! -f "$1" ]; then
+    echo "Creating log file $1"
+    echo Time,CO2 PPM,Temperature,Relative humidity > $1
+fi
 
-runtime="1 day"
-endtime=$(date -d "$runtime" +%s)
-
-while [[ $(date -u +%s) -le $endtime ]]
-do
-    echo `date -I'seconds'`, `usbtenkiget -i a` >> $1
-    sleep 600
-done
+timeout 1m usbtenkiget -i a -L $1 -I 10000
