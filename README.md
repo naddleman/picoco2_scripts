@@ -6,7 +6,15 @@ timestamps to a csv file, recording every 10 minutes for 24 hours.
 
 Usage:
 ```bash
-./track_co2.sh outfile.csv
+./track_co2.sh -L <outfile.csv> -I <interval (seconds)> -d <duration>
+
+## Example, record every 10 seconds for 1 hour:
+
+./track_co2.sh -L out.csv -I 10 -d 1h
+
+## duration is a floating point number with suffix 's' 'm' 'h' or 'd' for 
+## seconds, minutes, hours, and days, respectively. Defaults to 's'.
+## Passing '0' enables indefinite logging.
 ```
 
 Requires usbtenkiget software from the
